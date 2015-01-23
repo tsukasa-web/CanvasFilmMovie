@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>CanvasFilmMovie Sample2</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/CanvasFilmMovie_Sample2.css">
+</head>
+<body>
+    <div class="loading"><p>NOW LOADING ...</p></div>
+
+    <div class="container">
+        <div id="film-canvas-parent-01"></div>
+        <div id="film-canvas-parent-02"></div>
+        <div class="content"><p>CANVAS FILM MOVIE</p></div>
+    </div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/velocity.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/CanvasFilmMovie.js"></script>
+
+    <script>
+        (function() {
+            var url1 = "img/sprite2-1.jpg";
+            var url2 = "img/sprite2-2.jpg";
+            var ImgData1 = new Image();
+            var ImgData2 = new Image();
+            var targetCanvas_01 = $('#film-canvas-parent-01');
+            var targetCanvas_02 = $('#film-canvas-parent-02');
+            var CanvasFilmMovie_01;
+            var CanvasFilmMovie_02;
+            var count = 0;
+
+            ImgData1.onload = (function() {
+                targetCanvas_01.CanvasFilmMovie({
+                    targetImgArray: [ImgData1],
+                    sceneWidth: 240,
+                    sceneHeight: 135,
+                    offsetValue: 1
+                });
+                CanvasFilmMovie_01 = targetCanvas_01.data('CanvasFilmMovie');
+                loadCount();
+            });
+
+            ImgData2.onload = (function() {
+                targetCanvas_02.CanvasFilmMovie({
+                    targetImgArray: [ImgData2],
+                    sceneWidth: 240,
+                    sceneHeight: 135,
+                    offsetValue : -1
+                });
+                CanvasFilmMovie_02 = targetCanvas_02.data('CanvasFilmMovie');
+                loadCount();
+            });
+
+            ImgData1.src = url1;
+            ImgData2.src = url2;
+
+            function loadCount(){
+                count++;
+                if(count === 2){
+                    $('.loading').velocity({
+                        opacity: 0
+                    }, {
+                        delay: 500,
+                        display: 'none',
+                        duration: 600,
+                        easing: 'easeOutQuint',
+                        complete: function () {
+                            CanvasFilmMovie_01.drawLoopSpeedUp();
+                            CanvasFilmMovie_02.drawLoopSpeedUp();
+
+                            targetCanvas_01.velocity({
+                                left: '0%'
+                            }, {
+                                delay: 500,
+                                duration: 600,
+                                easing: 'easeOutQuint'
+                            });
+                            targetCanvas_02.velocity({
+                                right: '0%'
+                            }, {
+                                delay: 500,
+                                duration: 600,
+                                easing: 'easeOutQuint'
+                            });
+                            targetCanvas_01.velocity({
+                                top: '0%',
+                                'margin-top': '0px',
+                                translateY: '0%',
+                                scale: 0.5
+                            }, {
+                                delay: 3500,
+                                duration: 1000,
+                                easing: 'easeOutQuint'
+                            });
+                            targetCanvas_02.velocity({
+                                bottom: '0%',
+                                'margin-bottom': '0px',
+                                translateY: '0%',
+                                scale: 0.5
+                            }, {
+                                delay: 3500,
+                                duration: 1000,
+                                easing: 'easeOutQuint'
+                            });
+                        }
+                    });
+                }
+            }
+        }).call(this);
+    </script>
+</body>
+</html>

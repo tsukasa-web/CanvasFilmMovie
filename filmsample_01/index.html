@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>CanvasFilmMovie Sample1</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/CanvasFilmMovie_Sample1.css">
+</head>
+<body>
+    <div class="loading"><p>NOW LOADING ...</p></div>
+    <div class="content">
+        <div id="film-canvas-parent"></div>
+        <p>
+            <a href="#" class="speedup-btn btn">SPEEDUP</a>
+            <a href="#" class="speeddown-btn btn">SPEEDDOWN</a>
+            <a href="#" class="start-btn btn">PLAY</a>
+            <a href="#" class="stop-btn btn">PAUSE</a>
+            <a href="#" class="fps-btn btn">CHANGE 60FPS</a>
+            <a href="#" class="clear-btn btn">CLEAR</a>
+        </p>
+    </div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/velocity.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/CanvasFilmMovie.js"></script>
+
+    <script>
+        (function() {
+            var url = "img/sprite.jpg";
+            var ImgData = new Image();
+            var CanvasFilmMovie_01;
+
+            ImgData.onload = (function() {
+                var targetCanvas = $('#film-canvas-parent');
+                targetCanvas.CanvasFilmMovie({
+                    targetImgArray: [ImgData],
+                    sceneWidth: 240,
+                    sceneHeight: 135,
+                    fps: 30
+                });
+                CanvasFilmMovie_01 = targetCanvas.data('CanvasFilmMovie');
+
+                $('.loading').velocity({
+                    opacity: 0
+                }, {
+                    delay: 500,
+                    display: 'none',
+                    duration: 600,
+                    easing: 'easeOutQuint',
+                    complete: function () {
+                        $('.speedup-btn').on('click', CanvasFilmMovie_01.drawLoopSpeedUp);
+                        $('.speeddown-btn').on('click', CanvasFilmMovie_01.drawLoopSpeedDown);
+                        $('.start-btn').on('click', CanvasFilmMovie_01.drawLoopStart);
+                        $('.stop-btn').on('click', CanvasFilmMovie_01.drawLoopStop);
+                        $('.fps-btn').on('click', function () {
+                            return CanvasFilmMovie_01.changeFps(60);
+                        });
+                        $('.clear-btn').on('click', CanvasFilmMovie_01.spriteClear);
+                    }
+                });
+            });
+
+            ImgData.src = url;
+        }).call(this);
+    </script>
+</body>
+</html>
